@@ -20,8 +20,8 @@ router.get('/:id', validateProjectId, (req, res) => {
 });
 
 //GET for actions of a specific project
-router.get('/:id/actions', (req, res) => {
-  Actions.get(req.params.project_id)
+router.get('/:id/actions', validateProjectId, (req, res) => {
+  Projects.getProjectActions(req.params.id)
     .then(action => {
       res.status(200).json(action);
     })
@@ -44,7 +44,7 @@ router.post('/', (req, res) => {
 });
 
 //POST an action to a project //✔
-router.post('/:id/actions', (req, res) => {
+router.post('/:id/actions', validateProjectId, (req, res) => {
   const projId = req.params.id;
   req.body = {...req.body, project_id : projId}
 
@@ -86,22 +86,22 @@ router.delete('/:id', validateProjectId, (req, res) => {
 
 
 //Middleware
-function validateProjectId(req, res, next) { //TODO: Look at logic here for finding params as truthy
+function validateProjectId(req, res, next) { //✔
   console.log("REQ.PARAMS LOG", req.params)
     Projects.get(req.params.id)
       .then(proj => {
         if (req.params.id === `${proj.id}`) {
-        console.log("THIS IS PROJ", proj)
+        //console.log("THIS IS PROJ", proj)
         req.projects = proj;
 
         next();
         } else {
-          console.log("ELSE ERROR")
+          //console.log("ELSE ERROR")
           res.status(404).json({ error: "There was a problem with the database" });
         }
       })
       .catch(err => {
-        console.log(".catch err: ", err)
+        //console.log(".catch err: ", err)
         res.status(500).json({ error: "Invalid Project ID" });
       })
 }
