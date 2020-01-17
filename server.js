@@ -1,4 +1,5 @@
 const express = require('express');
+var cors = require('cors')
 const dbrouter = require('./dbrouter');
 const server = express();
 
@@ -6,6 +7,8 @@ const server = express();
 server.use(logger);
 
 server.use(express.json());
+
+server.use(cors());
 
 //Routers
 server.use('/api/projects', dbrouter);

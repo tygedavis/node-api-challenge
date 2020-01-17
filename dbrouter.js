@@ -70,6 +70,19 @@ router.put('/:id', validateProjectId, (req, res) => {
     });
 });
 
+//PUT (edit) an action of a project //✔
+router.put('/:id/actions/:a_id', validateProjectId, (req, res) => {
+  console.log("PARAMS ID", req.params.id)
+  console.log("ACTION ID", req.params.a_id)
+
+  Actions.update(req.params.a_id, req.body)
+    .then(updatedAction => {
+      res.status(200).json(updatedAction)
+    })
+    .catch(err => {
+      res.status(500).json({ error: "There was an error editing the action" });
+    });
+});
 
 //DELETE a project //✔
 router.delete('/:id', validateProjectId, (req, res) => {
@@ -82,6 +95,17 @@ router.delete('/:id', validateProjectId, (req, res) => {
       res.status(500).json({ error: "Hubo un problema con eliminar el projecto del database" });
     });
 });
+
+//DELETE an action from a project //✔
+router.delete('/:id/actions/:a_id', validateProjectId, (req, res) => {
+  Actions.remove(req.params.a_id)
+  .then(deletedAction => {
+    res.status(200).json(deletedAction)
+  })
+  .catch(err => {
+    res.status(500).json({ error: "There was an error editing the action" });
+  });
+})
 
 
 
