@@ -19,7 +19,7 @@ router.get('/:id', validateProjectId, (req, res) => {
   return res.status(200).json(req.projects)
 });
 
-//GET for actions of a specific project
+//GET for actions of a specific project //✔
 router.get('/:id/actions', validateProjectId, (req, res) => {
   Projects.getProjectActions(req.params.id)
     .then(action => {
