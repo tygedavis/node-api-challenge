@@ -87,23 +87,23 @@ router.delete('/:id', validateProjectId, (req, res) => {
 
 //Middleware
 function validateProjectId(req, res, next) { //TODO: Look at logic here for finding params as truthy
-  //console.log(req.params)
-  if(req.params.id) {
+  console.log("REQ.PARAMS LOG", req.params)
     Projects.get(req.params.id)
       .then(proj => {
-        console.log(proj)
+        if (req.params.id === `${proj.id}`) {
+        console.log("THIS IS PROJ", proj)
         req.projects = proj;
 
         next();
+        } else {
+          console.log("ELSE ERROR")
+          res.status(404).json({ error: "There was a problem with the database" });
+        }
       })
       .catch(err => {
         console.log(".catch err: ", err)
-        res.status(500).json({ error: "There was a problem with the database" });
+        res.status(500).json({ error: "Invalid Project ID" });
       })
-  } else {
-    console.log("Else error")
-    res.status(404).json({ error: "Invalid Project ID" });
-  }
 }
 
 module.exports = router;
